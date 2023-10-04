@@ -1,46 +1,61 @@
+// Documentation on Data sources: https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
+// A data source determines how Prisma connects your database
+// Using the mysql as a provider and the 'DATABASE_URL' from the '.env' file
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
+// Documentation on Generators: https://www.prisma.io/docs/concepts/components/prisma-schema/generators
+// A generator determines which assets are created when you run the 'prisma generate' command
 generator client {
   provider = "prisma-client-js"
 }
 
+// Documentation on Data models: https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
+// Profile table
 model Profile {
-  id String @id @default(uuid())
-  userId String @unique
-  name String
+  id       String @id @default(uuid())
+  userId   String @unique
+  name     String
   imageUrl String @db.Text
-  email String @db.Text
+  email    String @db.Text
 
-  servers Server[]
-  members Member[]
+  // Documentation on relations: https://www.prisma.io/docs/concepts/components/prisma-schema/relations
+  // Creates back relations with the Server, Member and Channel tables
+  servers  Server[]
+  members  Member[]
   channels Channel[]
 
+  // Sets the creation date and update date
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Server {
-  id String @id @default(uuid())
-  name String
-  imageUrl String @db.Text
+  id         String @id @default(uuid())
+  name       String
+  imageUrl   String @db.Text
   inviteCode String @db.Text
 
+  // Documentation on relations: https://www.prisma.io/docs/concepts/components/prisma-schema/relations
+  // Creates relations with the Profile tables
   profileId String
-  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  members Member[]
+  members  Member[]
   channels Channel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Foreign key to fix the warning on line 45
   @@index([profileId])
 }
 
+// Documentation on Enums: https://www.prisma.io/docs/concepts/components/prisma-schema/data-model#defining-enums
+// Creates roles for members on servers
 enum MemberRole {
   ADMIN
   MODERATOR
@@ -48,14 +63,15 @@ enum MemberRole {
 }
 
 model Member {
-  id String @id @default(uuid())
+  id   String     @id @default(uuid())
+  // Sets the default role of a new member to GUEST
   role MemberRole @default(GUEST)
 
   profileId String
-  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   serverId String
-  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -64,6 +80,7 @@ model Member {
   @@index([serverId])
 }
 
+// Creates types for channels on servers
 enum ChannelType {
   TEXT
   AUDIO
@@ -71,15 +88,16 @@ enum ChannelType {
 }
 
 model Channel {
-  id String @id @default(uuid())
+  id   String      @id @default(uuid())
   name String
+  // Sets the default type of a new channel to TEXT
   type ChannelType @default(TEXT)
 
   profileId String
-  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   serverId String
-  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
