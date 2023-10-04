@@ -61,41 +61,54 @@ export const InitialModal = () => {
     }
 
     return (
+        /* Creates a Dialog component already opened */
         <Dialog open={true}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
+                {/* Creates the header of the Dialog component */}
                 <DialogHeader className="pt-8 px-6">
+                    {/* Title of the header */}
                     <DialogTitle className="text-2xl text-center font-bold">
                         Customize your server
                     </DialogTitle>
+                    {/* Description of the header */}
                     <DialogDescription className="text-center text-zinc-500">
                         Give your server a personality with a name and an image. You can always change it later.
                     </DialogDescription>
                 </DialogHeader>
+                {/* Creates a Form with the form schema*/}
                 <Form {...form}>
+                    {/* Default HTML form that calls the onSubmit function */}
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <div className="space-y-8 px-6">
+                            {/* Component to upload the image of the server */}
                             <div className="flex items-center justify-center text-center">
                                 TODO: Image Upload
                             </div>
-
+                            {/* FormField to write the name of the server */}
                             <FormField control={form.control} name="name" render={({ field }) => (
                                 <FormItem>
+                                    {/* Label of the FormField */}
                                     <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
                                         Server name
                                     </FormLabel>
+                                    {/* Input of the FormField */}
                                     <FormControl>
                                         <Input
+                                            /* Gets disabled when there is a request currently submitting */
                                             disabled={isLoading}
                                             className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
                                             placeholder="Enter server name"
                                             {...field}
                                         />
                                     </FormControl>
+                                    {/* Displays the warning message if the name or image is not correct */}
                                     <FormMessage />
                                 </FormItem>
                             )} />
                         </div>
+                        {/* Creates the footer of the Dialog component */}
                         <DialogFooter className="bg-gray-100 px-6 py-4">
+                            {/* Gets disabled when there is a request currently submitting */}
                             <Button variant="primary" disabled={isLoading}>
                                 Create
                             </Button>
