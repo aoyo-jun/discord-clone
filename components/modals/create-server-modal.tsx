@@ -35,6 +35,7 @@ export const CreateServerModal = () => {
     const { isOpen, onClose, type } = useModal();
     const router = useRouter();
 
+    // if the type is "createServer" opens modal
     const isModalOpen = isOpen && type === "createServer";
 
     const form = useForm({
@@ -63,13 +64,14 @@ export const CreateServerModal = () => {
         }
     }
 
+    // Closes the modal
     const handleClose = () => {
         form.reset();
         onClose();
     }
 
     return (
-        /* Creates a Dialog component already opened */
+        /* Creates a Dialog component for modal */
         <Dialog open={isModalOpen} onOpenChange={handleClose}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 {/* Creates the header of the Dialog component */}
