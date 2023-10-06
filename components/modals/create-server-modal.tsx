@@ -8,9 +8,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import { FileUpload } from "@/components/file-upload";
 import { useRouter } from "next/navigation";
+import { useModal } from "@/hooks/use-modal-store";
 
 // Documentation on the Schema (Zod): https://zod.dev/?id=basic-usage
 // Documentation on the useForm: https://react-hook-form.com/docs/useform
@@ -31,14 +31,11 @@ const formSchema = z.object({
     })  
 });
 
-export const InitialModal = () => {
-    // Checks if the modal is mounted (assembled) to avoid hydration errors
-    const [isMounted, setIsMounted] = useState(false);
+export const CreateServerModal = () => {
+    const { isOpen, onClose, type } = useModal();
     const router = useRouter();
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+    const isModalOpen = isOpen && type === "createServer";
 
     const form = useForm({
         // Integrates with the shadcn/ui schema validation library
@@ -60,20 +57,20 @@ export const InitialModal = () => {
 
             form.reset();
             router.refresh();
-            window.location.reload();
+            onClose();
         } catch (error) {
             console.log(error);
         }
     }
 
-    // If it is not mounted returns null
-    if (!isMounted) {
-        return null;
+    const handleClose = () => {
+        form.reset();
+        onClose();
     }
 
     return (
         /* Creates a Dialog component already opened */
-        <Dialog open={true}>
+        <Dialog open={isModalOpen} onOpenChange={handleClose}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 {/* Creates the header of the Dialog component */}
                 <DialogHeader className="pt-8 px-6">
