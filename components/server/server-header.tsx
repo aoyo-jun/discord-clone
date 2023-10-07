@@ -6,20 +6,24 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { ChevronDown, LogOut, PlusCircle, SettingsIcon, Trash, UserPlus, Users } from "lucide-react";
 
 interface ServerHeaderProps {
+    // Custom type with Members and Profiles, not included on just the "Server" type
     server: ServerWithMembersWithProfiles;
     role?: MemberRole;
 }
 
+// Receives the server and role using the ServerHeaderProps
 export const ServerHeader = ({
     server,
     role,
 }: ServerHeaderProps) => {
     const isAdmin = role === MemberRole.ADMIN;
+    // Every Admin is also a moderator
     const isModerator = isAdmin || role === MemberRole.MODERATOR;
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger className="focus:outline-none" asChild>
+                {/* Name and dropdown options of the server */}
                 <button className="w-full text-md font-semibold px-3 flex items-center h-12
                 border-neutral-200 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10
                 dark:hover:bg-zinc-700/50 transition">
@@ -27,6 +31,7 @@ export const ServerHeader = ({
                     <ChevronDown className="h-5 w-5 ml-auto" />
                 </button>
             </DropdownMenuTrigger>
+            {/* Based on each role, there's options visible */}
             <DropdownMenuContent className="w-56 text-sm font-medium text-black dark:text-neutral-400 space-y-[2px]">
                 {isModerator && (
                     <DropdownMenuItem className="text-indigo-600 dark:text-indigo-400 px-3 py-2 text-sm cursor-pointer">
