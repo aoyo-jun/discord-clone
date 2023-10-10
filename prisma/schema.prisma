@@ -37,7 +37,7 @@ model Server {
   id         String @id @default(uuid())
   name       String
   imageUrl   String @db.Text
-  inviteCode String @db.Text
+  inviteCode String @unique
 
   // Documentation on relations: https://www.prisma.io/docs/concepts/components/prisma-schema/relations
   // Creates relations with the Profile tables

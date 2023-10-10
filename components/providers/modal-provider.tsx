@@ -2,6 +2,7 @@
 
 import { CreateServerModal } from "@/components/modals/create-server-modal";
 import { useEffect, useState } from "react";
+import { InviteModal } from "@/components/modals/invite-modal";
 
 export const ModalProvider = () => {
     // Checks if the modal is mounted (assembled) to avoid hydration errors
@@ -20,6 +21,7 @@ export const ModalProvider = () => {
         // Returns the modal
         <>
             <CreateServerModal />
+            <InviteModal />
         </>
     )
 }
