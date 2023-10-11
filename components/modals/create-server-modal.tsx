@@ -51,7 +51,7 @@ export const CreateServerModal = () => {
     // Extracts the loading state from the form to disable the inputs if it is currently submitting a request
     const isLoading = form.formState.isSubmitting;
 
-    // Function to log the values (for now)
+    // Adds the server name and image url
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.post("/api/servers", values);
