@@ -11,20 +11,30 @@ import { useState } from "react";
 import axios from "axios";
 
 // Documentation on the Dialog component: https://ui.shadcn.com/docs/components/dialog
+// Documentation on the Label component: https://ui.shadcn.com/docs/components/label
+// Documentation on the Input component: https://ui.shadcn.com/docs/components/input
+// Documentation on the Button component: https://ui.shadcn.com/docs/components/button
 
+// Creates the modal for the invite function
 export const InviteModal = () => {
+    // Imports the useModal functions
     const { onOpen, isOpen, onClose, type, data } = useModal();
+    // Gets the current URL of the site (aka localhost:3000)
     const origin = useOrigin();
 
-    // if the type is "createServer" opens modal
+    // if the type is "invite" opens modal
     const isModalOpen = isOpen && type === "invite";
+    // Gets the server data, used to get the server inviteCode
     const { server } =  data;
 
+    // States "copied" and "isLoading"
     const [copied, setCopied] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    // Creates the invite URL
     const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
 
+    // Copies the inviteURL to the clipboard of the user and after 1000ms sets the setCopied to false again, updating the state
     const onCopy = () => {
         navigator.clipboard.writeText(inviteUrl);
         setCopied(true);
@@ -34,26 +44,28 @@ export const InviteModal = () => {
         }, 1000);
     };
 
+    // Updates the invite URL
     const onNew = async () => {
         try {
+            // Disables the input and buttons while loading
             setIsLoading(true);
+            // Generates the new invite URL
             const response = await axios.patch(`/api/servers/${server?.id}/invite-code`)
 
+            // Changes the invite URL using the onOpen function
             onOpen("invite", { server: response.data })
         } catch (error) {
             console.log(error);
         } finally {
+            // Enables the input and buttons again after loading is completed
             setIsLoading(false);
         }
     }
     
     return (
-        /* Creates a Dialog component for modal */
         <Dialog open={isModalOpen} onOpenChange={onClose}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
-                {/* Creates the header of the Dialog component */}
                 <DialogHeader className="pt-8 px-6">
-                    {/* Title of the header */}
                     <DialogTitle className="text-2xl text-center font-bold">
                         Invite Friends
                     </DialogTitle>
