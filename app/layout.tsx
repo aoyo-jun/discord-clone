@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <ClerkProvider>
         <body className={cn(
-            // The 'cn' function aka 'twMerge' is from 'tailwind-merge' package. Still don't know what it does
+            // The 'cn' function aka 'twMerge' is from 'tailwind-merge' package
             font.className,
             "bg-white dark:bg-[#313338]"
           )}>
