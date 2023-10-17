@@ -5,7 +5,7 @@ import { create } from "zustand";
 
 // This hook is used to control all modals
 
-export type ModalType = "createServer" | "invite" | "editServer";
+export type ModalType = "createServer" | "invite" | "editServer" | "members" | "createChannel" | "leaveServer" | "deleteServer";
 
 interface ModalData {
     server?: Server
