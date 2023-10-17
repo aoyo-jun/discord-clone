@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 // Documentation on the Dialog component: https://ui.shadcn.com/docs/components/dialog
 // Documentation on the Button component: https://ui.shadcn.com/docs/components/button
 
-// Creates the modal for the invite function
+// Creates the modal for the leave server function
 export const LeaveServerModal = () => {
     // Imports the useModal functions
     const { isOpen, onClose, type, data } = useModal();
@@ -18,11 +18,12 @@ export const LeaveServerModal = () => {
 
     // if the type is "leaveServer" opens modal
     const isModalOpen = isOpen && type === "leaveServer";
-    // Gets the server data, used to get the server inviteCode
+    // Gets the server data
     const { server } =  data;
 
     const [isLoading, setIsLoading] = useState(false);
     
+    // When triggered the user leaves the server
     const onClick = async () => {
         try {
             setIsLoading(true);

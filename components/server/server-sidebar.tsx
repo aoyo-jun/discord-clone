@@ -7,16 +7,20 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ServerSearch } from "./server-search";
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react";
 
+// Documentation on the ScrolArea component: https://ui.shadcn.com/docs/components/scroll-area
+
 interface ServerSidebarProps {
     serverId: string;
 }
 
+// Creates icons for the server channels
 const iconMap = {
     [ChannelType.TEXT]: <Hash className="mr-2 h-4 w-4" />,
     [ChannelType.AUDIO]: <Mic className="mr-2 h-4 w-4" />,
     [ChannelType.VIDEO]: <Video className="mr-2 h-4 w-4" />
 };
 
+// Creates icons for the roles
 const roleIconMap = {
     [MemberRole.GUEST]: null,
     [MemberRole.MODERATOR]: <ShieldCheck className="ml-2 h-4 w-4 text-indigo-500" />,

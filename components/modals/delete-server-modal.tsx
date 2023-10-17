@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 // Documentation on the Dialog component: https://ui.shadcn.com/docs/components/dialog
 // Documentation on the Button component: https://ui.shadcn.com/docs/components/button
 
-// Creates the modal for the invite function
+// Creates the modal for the delete server function
 export const DeleteServerModal = () => {
     // Imports the useModal functions
     const { isOpen, onClose, type, data } = useModal();
@@ -18,11 +18,12 @@ export const DeleteServerModal = () => {
 
     // if the type is "deleteServer" opens modal
     const isModalOpen = isOpen && type === "deleteServer";
-    // Gets the server data, used to get the server inviteCode
+    // Gets the server data
     const { server } =  data;
 
     const [isLoading, setIsLoading] = useState(false);
     
+    // Deletes the server though axios
     const onClick = async () => {
         try {
             setIsLoading(true);
@@ -47,6 +48,7 @@ export const DeleteServerModal = () => {
                     <DialogTitle className="text-2xl text-center font-bold">
                         Delete Server
                     </DialogTitle>
+                    {/* Warning message */}
                     <DialogDescription className="text=center text-zinc-500">
                         Are you sure you want to do this? <br />
                         <span className="text-indigo-500 font-semibold">{server?.name}</span> will be permanently <span className="text-rose-500 font-bold">deleted</span>.

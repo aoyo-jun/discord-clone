@@ -24,14 +24,19 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 // Documentation on the Dialog component: https://ui.shadcn.com/docs/components/dialog
+// Documentation on the ScrollArea component: https://ui.shadcn.com/docs/components/scroll-area
+// Documentation on the Avatar component: https://ui.shadcn.com/docs/components/avatar (Using custom UserAvatar)
+// Documentation on the DropdownMenu component: https://ui.shadcn.com/docs/components/dropdown-menu
+// Documentation on the query-string: https://www.npmjs.com/package/query-string
 
+// Creates icons for each role
 const roleIconMap = {
     "GUEST": null,
     "MODERATOR": <ShieldCheck className="h-4 w-4 text-indigo-500" />,
     "ADMIN": <ShieldAlert className="h-4 w-4 text-rose-500" />
 }
 
-// Creates the modal for the invite function
+// Creates the modal for the manage members function
 export const MembersModal = () => {
     // Imports the useModal functions
     const router = useRouter();
@@ -40,9 +45,10 @@ export const MembersModal = () => {
 
     // if the type is "members" opens modal
     const isModalOpen = isOpen && type === "members";
-    // Gets the server data, used to get the server inviteCode
+    // Gets the server data
     const { server } =  data as { server: ServerWithMembersWithProfiles };
 
+    // Kicks the member
     const onKick = async (memberId: string) => {
         try {
             setLoadingId(memberId);
@@ -64,6 +70,7 @@ export const MembersModal = () => {
         }
     }
 
+    // Changes the role of the member
     const onRoleChange = async (memberId: string, role: MemberRole) => {
         try {
             setLoadingId(memberId);

@@ -20,10 +20,12 @@ import qs from "query-string"
 // Documentation on the Form (React Hook Forms) component: https://ui.shadcn.com/docs/components/form
 // Documentation on the Input component: https://ui.shadcn.com/docs/components/input
 // Documentation on the Button component: https://ui.shadcn.com/docs/components/button
+// Documentation on the Select component: https://ui.shadcn.com/docs/components/select
+// Documentation on the query-string: https://www.npmjs.com/package/query-string
 
-// Creates an object schema for the form, with the name and imageUrl
+// Creates an object schema for the form, with the name and type of the channel
 const formSchema = z.object({
-    // 'name' should be a string with a minimum length of 1 character, if not, the warning message will be displayed
+    // 'name' should be a string with a minimum length of 1 character and cannot be "general", if not, the warning message will be displayed
     name: z.string().min(1, {
         message: "Channel name is required."
     }).refine(
@@ -31,6 +33,7 @@ const formSchema = z.object({
             message: "Channel name cannot 'general'."
         }
     ),
+    // 'type' should be an Enum of ChannelType (Prisma)
     type: z.nativeEnum(ChannelType)
 });
 
@@ -48,6 +51,7 @@ export const CreateChannelModal = () => {
         // Sets the default values of the form
         defaultValues: {
             name: "",
+            // Default channel is TEXT
             type: ChannelType.TEXT
         }
     });
@@ -55,7 +59,7 @@ export const CreateChannelModal = () => {
     // Extracts the loading state from the form to disable the inputs if it is currently submitting a request
     const isLoading = form.formState.isSubmitting;
 
-    // Adds the server name and image url
+    // Creates the channel when onSubmit is triggered
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const url = qs.stringifyUrl({
