@@ -13,6 +13,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChannelType } from "@prisma/client";
 import qs from "query-string"
+import { useEffect } from "react";
 
 // Documentation on the Schema (Zod): https://zod.dev/?id=basic-usage
 // Documentation on the useForm: https://react-hook-form.com/docs/useform
@@ -38,12 +39,13 @@ const formSchema = z.object({
 });
 
 export const CreateChannelModal = () => {
-    const { isOpen, onClose, type } = useModal();
+    const { isOpen, onClose, type, data } = useModal();
     const router = useRouter();
     const params = useParams();
 
     // if the type is "createChannel" opens modal
     const isModalOpen = isOpen && type === "createChannel";
+    const { channelType } = data;
 
     const form = useForm({
         // Integrates with the shadcn/ui schema validation library
@@ -52,9 +54,17 @@ export const CreateChannelModal = () => {
         defaultValues: {
             name: "",
             // Default channel is TEXT
-            type: ChannelType.TEXT
+            type: channelType || ChannelType.TEXT
         }
     });
+
+    useEffect(() => {
+        if (channelType) {
+            form.setValue("type", channelType);
+        } else {
+            form.setValue("type", ChannelType.TEXT)
+        }
+    }, [channelType, form]);
 
     // Extracts the loading state from the form to disable the inputs if it is currently submitting a request
     const isLoading = form.formState.isSubmitting;
