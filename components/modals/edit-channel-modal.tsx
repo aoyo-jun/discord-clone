@@ -67,7 +67,7 @@ export const EditChannelModal = () => {
     // Extracts the loading state from the form to disable the inputs if it is currently submitting a request
     const isLoading = form.formState.isSubmitting;
 
-    // Creates the channel when onSubmit is triggered
+    // Edit the channel when onSubmit is triggered
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const url = qs.stringifyUrl({

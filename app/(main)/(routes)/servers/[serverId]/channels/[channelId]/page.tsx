@@ -1,0 +1,53 @@
+import { currentProfile } from "@/lib/current-profile";
+import { redirectToSignIn } from "@clerk/nextjs";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
+import { ChatHeader } from "@/components/chat/chat-header";
+
+interface ChannelIdPageProps {
+    params: {
+        serverId: string;
+        channelId: string;
+    }
+}
+
+// Channel page
+const ChannelIdPage = async ({
+    params
+}: ChannelIdPageProps) => {
+    // Awaits current profile
+    const profile = await currentProfile();
+
+    // If there's no profile, the user is unauthorized
+    if (!profile) {
+        return redirectToSignIn();
+    }
+
+    // Finds the channel on the db
+    const channel = await db.channel.findUnique({
+        where: {
+            id: params.channelId
+        }
+    });
+
+    // Finds the member of the correct server on the db
+    const member = await db.member.findFirst({
+        where:{
+            serverId: params.serverId,
+            profileId: profile.id
+        }
+    });
+
+    // If there's no channel or member, redirects to the main page
+    if (!channel || !member) {
+        redirect("/");
+    }
+
+    return (
+        <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
+            <ChatHeader serverId={channel.serverId} name={channel.name} type={"channel"} />
+        </div>
+    );
+}
+ 
+export default ChannelIdPage;

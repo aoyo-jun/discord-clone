@@ -31,7 +31,7 @@ export const ServerHeader = ({
                 border-neutral-200 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10
                 dark:hover:bg-zinc-700/50 transition">
                     {server.name}
-                    <ChevronDown className="h-5 w-5 ml-auto" />
+                    <ChevronDown className="hidden md:block h-5 w-5 ml-auto" />
                 </button>
             </DropdownMenuTrigger>
             {/* Based on each role, there's options visible */}
