@@ -5,6 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { ModalProvider } from '@/components/providers/modal-provider'
 import { cn } from '@/lib/utils'
+import { SocketProvider } from '@/components/providers/socket-provider'
 
 // Documentation on the ClerkProvider: https://clerk.com/docs/components/clerk-provider
 // Documentation on the ThemeProvider: https://www.npmjs.com/package/next-themes and https://ui.shadcn.com/docs/dark-mode/next
@@ -37,8 +38,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             enableSystem={false}
             storageKey='discord-theme'
           >
-            <ModalProvider />
-            {children}
+            <SocketProvider>
+              <ModalProvider />
+              {children}
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </ClerkProvider>
