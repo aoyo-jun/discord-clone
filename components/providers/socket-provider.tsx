@@ -8,6 +8,8 @@ import {
 } from "react";
 import { io as ClientIO } from "socket.io-client";
 
+// Documentation on the io from socket.io-client: https://socket.io/docs/v4/client-api/
+
 type SocketContextType = {
     socket: any | null;
     isConnected: boolean;
@@ -22,6 +24,7 @@ export const useSocket = () => {
     return useContext(SocketContext);
 };
 
+// Used to see if it is connected
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     const [socket, setSocket] = useState(null);
     const [isConnected, setIsConnected] = useState(false);

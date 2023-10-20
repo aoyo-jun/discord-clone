@@ -8,6 +8,7 @@ export type ServerWithMembersWithProfiles = Server & {
     members: (Member & { profile: Profile })[];
 };
 
+// Creates a new type of NextApiResponse with the Socket IO
 export type NextApiResponseServerIo = NextApiResponse & {
     socket: Socket & {
         server: NetServer & {

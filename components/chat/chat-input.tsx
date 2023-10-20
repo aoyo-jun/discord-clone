@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Plus, Smile } from "lucide-react";
-import { stringify } from "querystring";
+
+// Documentation on the Form component: https://ui.shadcn.com/docs/components/form
+// Documentation on the Input component: https://ui.shadcn.com/docs/components/input
 
 interface ChatInputProps {
     apiUrl: string;
@@ -22,16 +24,19 @@ interface ChatInputProps {
     type: "channel" | "conversation";
 }
 
+// Form Schema for the messages
 const formSchema = z.object({
     content: z.string().min(1),
 });
 
+// Creates the input for the chat messages
 export const ChatInput = ({
     apiUrl,
     query,
     name,
     type
 }: ChatInputProps) => {
+    // Creates the form with a blank default value
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -39,8 +44,10 @@ export const ChatInput = ({
         }
     });
 
+    // Is loading if the form is submitting
     const isLoading = form.formState.isSubmitting;
 
+    // Subsmits the form using axios
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const url = qs.stringifyUrl({
@@ -61,6 +68,7 @@ export const ChatInput = ({
                     <FormItem>
                         <FormControl>
                             <div className="relative p-4 pb-6">
+                                {/* File attachment Button */}
                                 <button
                                     type="button"
                                     onClick={() => {}}
@@ -70,6 +78,7 @@ export const ChatInput = ({
                                 >
                                     <Plus className="text-white dark:text-[#313338]" />
                                 </button>
+                                {/* Chat Input */}
                                 <Input
                                     disabled={isLoading}
                                     className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75
@@ -78,6 +87,7 @@ export const ChatInput = ({
                                     placeholder={`Message ${type === "conversation" ? name : "#" + name}`}
                                     {...field}
                                 />
+                                {/* Emoji Button     */}
                                 <div className="absolute top-7 right-8">
                                     <Smile />
                                 </div>

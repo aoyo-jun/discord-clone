@@ -1,8 +1,10 @@
 import { db } from "@/lib/db";
 
 export const getOrCreateConversation = async (memberOneId: string, memberTwoId: string) => {
+    // Tries to find the conversation if it already exists
     let conversation = await findConversation(memberOneId, memberTwoId) || await findConversation(memberTwoId, memberOneId);
 
+    // If there's no conversation, creates a new one
     if (!conversation) {
         conversation = await createNewConversation(memberOneId, memberTwoId);
     }
@@ -10,6 +12,7 @@ export const getOrCreateConversation = async (memberOneId: string, memberTwoId: 
     return conversation;
 }
 
+// Finds the conversation on the db if it exists
 const findConversation = async (memberOneId: string, memberTwoId: string) => {
     try {
         return await db.conversation.findFirst({
@@ -37,6 +40,7 @@ const findConversation = async (memberOneId: string, memberTwoId: string) => {
     }
 }
 
+// Creates a new conversation on the db
 const createNewConversation = async (memberOneId: string, memberTwoId: string) => {
     try {
         return await db.conversation.create({

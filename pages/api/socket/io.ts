@@ -3,12 +3,15 @@ import { NextApiRequest } from "next";
 import { Server as ServerIO } from "socket.io";
 import { NextApiResponseServerIo } from "@/types";
 
+// Documentation on the Socket.io: https://socket.io/docs/v4/
+
 export const config = {
     api: {
         bodyParser: false
     }
 };
 
+// Don't know what's happening here
 const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
     if (!res.socket.server.io) {
         const path = "/api/socket/io";
