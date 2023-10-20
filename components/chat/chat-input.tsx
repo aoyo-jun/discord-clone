@@ -12,7 +12,10 @@ import {
     FormItem
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Plus, Smile } from "lucide-react";
+import { Plus } from "lucide-react";
+import { useModal } from "@/hooks/use-modal-store";
+import { EmojiPicker } from "@/components/emoji-picker";
+import { useRouter } from "next/navigation";
 
 // Documentation on the Form component: https://ui.shadcn.com/docs/components/form
 // Documentation on the Input component: https://ui.shadcn.com/docs/components/input
@@ -36,6 +39,9 @@ export const ChatInput = ({
     name,
     type
 }: ChatInputProps) => {
+    const { onOpen } = useModal();
+    const router = useRouter();
+
     // Creates the form with a blank default value
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -56,6 +62,8 @@ export const ChatInput = ({
             });
 
             await axios.post(url, values);
+            form.reset();
+            router.refresh();
         } catch (error) {
             console.log(error);
         }
@@ -71,7 +79,7 @@ export const ChatInput = ({
                                 {/* File attachment Button */}
                                 <button
                                     type="button"
-                                    onClick={() => {}}
+                                    onClick={() => onOpen("messageFile", { apiUrl, query })}
                                     className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500
                                     dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300
                                     transition rounded-full p-1 flex items-center justify-center"
@@ -87,9 +95,9 @@ export const ChatInput = ({
                                     placeholder={`Message ${type === "conversation" ? name : "#" + name}`}
                                     {...field}
                                 />
-                                {/* Emoji Button     */}
+                                {/* Emoji Button */}
                                 <div className="absolute top-7 right-8">
-                                    <Smile />
+                                    <EmojiPicker onChange={(emoji: string) => field.onChange(`${field.value} ${emoji}`)} />
                                 </div>
                             </div>
                         </FormControl>

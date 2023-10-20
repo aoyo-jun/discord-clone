@@ -5,12 +5,14 @@ import { create } from "zustand";
 
 // This hook is used to control all modals
 
-export type ModalType = "createServer" | "invite" | "editServer" | "members" | "createChannel" | "leaveServer" | "deleteServer" | "deleteChannel" | "editChannel";
+export type ModalType = "createServer" | "invite" | "editServer" | "members" | "createChannel" | "leaveServer" | "deleteServer" | "deleteChannel" | "editChannel" | "messageFile";
 
 interface ModalData {
     server?: Server;
     channel?: Channel;
     channelType?: ChannelType;
+    apiUrl?: string;
+    query?: Record<string, any>
 }
 
 // Explanation on interface: https://www.typescriptlang.org/docs/handbook/interfaces.html
