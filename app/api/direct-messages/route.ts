@@ -1,6 +1,6 @@
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { Message } from "@prisma/client";
+import { DirectMessage } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 // How many messages will be loaded at a time
@@ -14,30 +14,30 @@ export async function GET(
         const profile = await currentProfile();
         const { searchParams } = new URL(req.url);
         const cursor = searchParams.get("cursor");
-        const channelId = searchParams.get("channelId");
+        const conversationId = searchParams.get("conversationId");
 
         // If there's no profile, the user is unauthorized
         if (!profile) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        // If there's no channel ID, it is missing
-        if (!channelId) {
-            return new NextResponse("Channel ID Missing", { status: 400 });
+        // If there's no conversation ID, it is missing
+        if (!conversationId) {
+            return new NextResponse("Conversation ID Missing", { status: 400 });
         }
 
-        // Store the messages
-        let messages: Message[] = [];
+        // Store the direct messages
+        let messages: DirectMessage[] = [];
 
         if (cursor) {
-            messages = await db.message.findMany({
+            messages = await db.directMessage.findMany({
                 take: MESSAGES_BATCH,
                 skip: 1,
                 cursor: {
                     id: cursor,
                 },
                 where: {
-                    channelId: channelId,
+                    conversationId: conversationId,
                 },
                 include: {
                     member: {
@@ -51,10 +51,10 @@ export async function GET(
                 }
             });
         } else {
-            messages = await db.message.findMany({
+            messages = await db.directMessage.findMany({
                 take: MESSAGES_BATCH,
                 where: {
-                    channelId: channelId
+                    conversationId: conversationId
                 },
                 include: {
                     member: {
@@ -82,7 +82,7 @@ export async function GET(
         });
         
     } catch (error) {
-        console.log("[MESSAGES_GET]", error);
+        console.log("[DIRECT_MESSAGES_GET]", error);
         return new NextResponse("Internal Error", { status: 500 })
     }
 }
