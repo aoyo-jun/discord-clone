@@ -5,42 +5,35 @@ import { useModal } from "@/hooks/use-modal-store";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import qs from "query-string";
 
 // Documentation on the Dialog component: https://ui.shadcn.com/docs/components/dialog
 // Documentation on the Button component: https://ui.shadcn.com/docs/components/button
 
-// Creates the modal for the delete channel function
-export const DeleteChannelModal = () => {
+// Creates the modal for the delete message function
+export const DeleteMessageModal = () => {
     // Imports the useModal functions
     const { isOpen, onClose, type, data } = useModal();
-    const router = useRouter();;
 
-    // if the type is "deleteChannel" opens modal
-    const isModalOpen = isOpen && type === "deleteChannel";
-    // Gets the server data
-    const { server, channel } =  data;
+    // if the type is "deleteMessage" opens modal
+    const isModalOpen = isOpen && type === "deleteMessage";
+    // Gets the apiUrl and query from the data
+    const { apiUrl, query } =  data;
 
     const [isLoading, setIsLoading] = useState(false);
     
-    // Deletes the channel though axios
+    // Deletes the message though axios
     const onClick = async () => {
         try {
             setIsLoading(true);
             const url = qs.stringifyUrl({
-                url: `/api/channels/${channel?.id}`,
-                query: {
-                    serverId: server?.id
-                }
+                url: apiUrl || "",
+                query,
             });
 
             await axios.delete(url);
 
             onClose();
-
-            router.refresh();
-            router.push(`/servers/${server?.id}`);
         } catch (error) {
             console.log(error);
         } finally {
@@ -53,12 +46,12 @@ export const DeleteChannelModal = () => {
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl text-center font-bold">
-                        Delete Channel
+                        Delete Message
                     </DialogTitle>
                     {/* Warning message */}
                     <DialogDescription className="text=center text-zinc-500">
                         Are you sure you want to do this? <br />
-                        <span className="text-indigo-500 font-semibold">#{channel?.name}</span> will be permanently <span className="text-rose-500 font-bold">deleted</span>.
+                        The message will be permanently deleted.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="bg-gray-100 px-6 py-4">
