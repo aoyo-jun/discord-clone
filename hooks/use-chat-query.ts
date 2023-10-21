@@ -43,7 +43,7 @@ export const useChatQuery = ({
         queryFn: fetchMessages,
         getNextPageParam: (lastPage) => lastPage?.nextCursor,
         // Interval of 1 second if socket isn't connected
-        refetchInterval: isConnected ? false : 1000,
+        refetchInterval: 1000,
     });
 
     return {
