@@ -117,7 +117,7 @@ export const ChatItem = ({
         form.reset({
             content: content,
         });
-    }, [content]);
+    }, [form, content]);
 
     const fileType = fileUrl?.split(".").pop();
 
@@ -212,7 +212,7 @@ export const ChatItem = ({
                                 </Button>
                             </form>
                             <span className="text-[10px] mt-1 text-zinc-400">
-                                Press 'esc' to cancel, 'enter' to save
+                                Press esc to cancel, enter to save
                             </span>
                         </Form>
                     )}
