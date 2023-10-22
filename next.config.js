@@ -10,10 +10,10 @@ const nextConfig = {
     },
     images: {
         domains: [
-            "utfs.io",
-            "uploadthing.com"
+          "uploadthing.com",
+          "utfs.io"
         ]
-    }
+      }
 }
 
 module.exports = nextConfig
