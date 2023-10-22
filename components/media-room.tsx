@@ -5,20 +5,31 @@ import { LiveKitRoom, VideoConference } from "@livekit/components-react";
 import '@livekit/components-styles';
 import { useUser } from "@clerk/nextjs"
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface MediaRoomProps {
     chatId: string;
     video: boolean;
     audio: boolean;
+    params: {
+        serverId: string;
+        channelId: string;
+    }
 };
 
 export const MediaRoom = ({
     chatId,
     video,
-    audio
+    audio,
+    params
 }: MediaRoomProps) => {
     const { user } = useUser();
     const [ token, setToken ] = useState("");
+    const router = useRouter();
+
+    const redirectToGeneral = () => {
+        return router.push(`/servers/${params.serverId}/channels/${params.channelId}`);
+    }
 
     useEffect(() => {
         if (!user?.firstName || !user?.lastName) return;
@@ -57,6 +68,7 @@ export const MediaRoom = ({
             connect={true}
             video={video}
             audio={audio}
+            onDisconnected={redirectToGeneral}
         >
             <VideoConference />
         </LiveKitRoom>

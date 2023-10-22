@@ -53,6 +53,16 @@ const MemberIdPage = async ({
         return redirect(`/servers/${params.serverId}`)
     }
 
+    const generalChannel = await db.channel.findFirst({
+        where: {
+            name: "general"
+        }
+    })
+
+    if (!generalChannel) {
+        redirect("/");
+    }
+
     const { memberOne, memberTwo } = conversation;
 
     // Get the other member comparing the current member with the member one extracted from the conversation
@@ -66,6 +76,10 @@ const MemberIdPage = async ({
                     chatId={conversation.id}
                     video={true}
                     audio={true}
+                    params={{
+                        serverId: params.serverId,
+                        channelId: generalChannel.id
+                    }}
                 />
             )}
             {!searchParams.video && (

@@ -47,6 +47,16 @@ const ChannelIdPage = async ({
         redirect("/");
     }
 
+    const generalChannel = await db.channel.findFirst({
+        where: {
+            name: "general"
+        }
+    })
+
+    if (!generalChannel) {
+        redirect("/");
+    }
+
     return (
         <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
             <ChatHeader serverId={channel.serverId} name={channel.name} type={"channel"} />
@@ -79,6 +89,10 @@ const ChannelIdPage = async ({
                     chatId={channel.id}
                     video={false}
                     audio={true}
+                    params={{
+                        serverId: params.serverId,
+                        channelId: generalChannel.id
+                    }}
                 />
             )}
             {channel.type === ChannelType.VIDEO && (
@@ -86,6 +100,10 @@ const ChannelIdPage = async ({
                     chatId={channel.id}
                     video={true}
                     audio={true}
+                    params={{
+                        serverId: params.serverId,
+                        channelId: generalChannel.id
+                    }}
                 />
             )}
         </div>
