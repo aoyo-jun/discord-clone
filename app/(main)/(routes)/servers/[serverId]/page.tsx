@@ -1,32 +1,52 @@
-import { MobileToggle } from "@/components/mobile-toggle";
-import { db } from "@/lib/db";
+import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
+import { currentProfile } from "@/lib/current-profile";
+import { db } from "@/lib/db";
+
+interface ServerIdPageProps {
+  params: {
+    serverId: string;
+  }
+};
+
 const ServerIdPage = async ({
-    params
-}: {
-    params: { serverId: string }
-}) => {
+  params
+}: ServerIdPageProps) => {
+  const profile = await currentProfile();
 
-    const server = await db.server.findUnique({
-        where: {
-            id: params.serverId,
+  if (!profile) {
+    return redirectToSignIn();
+  }
+
+  const server = await db.server.findUnique({
+    where: {
+      id: params.serverId,
+      members: {
+        some: {
+          profileId: profile.id,
         }
-    })
-
-    if (!server) {
-        return redirect("/");
+      }
+    },
+    include: {
+      channels: {
+        where: {
+          name: "general"
+        },
+        orderBy: {
+          createdAt: "asc"
+        }
+      }
     }
+  })
 
-    return (
-        <div className="text-md font-semibold px-3 flex items-center h-12 border-neutral-200 dark:border-neutral-800 border-b-2">
-            {/* Triggers if on mobile device */}
-            <MobileToggle serverId={server.id} />
-            <p className="font-semibold text-md text-black dark:text-white">
-                {server.name}
-            </p>
-        </div>
-    );
+  const initialChannel = server?.channels[0];
+
+  if (initialChannel?.name !== "general") {
+    return null;
+  }
+
+  return redirect(`/servers/${params.serverId}/channels/${initialChannel?.id}`)
 }
-
+ 
 export default ServerIdPage;
