@@ -24,6 +24,8 @@ Features:
 
 obs: There's a lot of comments. They are for learning purposes.
 
+## Prerequisites
+**Node version 14.x**
 ## Cloning the repository
 ```
 git clone https://github.com/aoyo-jun/discord-clone.git
